@@ -18,61 +18,85 @@ namespace StudentManagement.Services
 
             while (running)
             {
-                Console.WriteLine("\n---- STUDENT MENU ----");
-                Console.WriteLine("1. Add Student");
-                Console.WriteLine("2. View Students");
-                Console.WriteLine("3. Delete Student");
-                Console.WriteLine("4. Check Adult");
-                Console.WriteLine("5. Filter Bases On Marks");
-                Console.WriteLine("6. Exit");
-                Console.Write("Choose option: ");
+                try
+                {
+                    Console.WriteLine("\n---- STUDENT MENU ----");
+                    Console.WriteLine("1. Add Student");
+                    Console.WriteLine("2. View Students");
+                    Console.WriteLine("3. Delete Student");
+                    Console.WriteLine("4. Check Adult");
+                    Console.WriteLine("5. Filter Bases On Marks");
+                    Console.WriteLine("6. Exit");
+                    Console.Write("Choose option: ");
 
-                int option = Convert.ToInt32(Console.ReadLine());
+                    int option = Convert.ToInt32(Console.ReadLine());
 
-                if (option == 1)
-                {
-                    AddStudent();
+                    if (option == 1)
+                    {
+                        AddStudent();
+                    }
+                    else if (option == 2)
+                    {
+                        displayStudent();
+                    }
+                    else if (option == 3)
+                    {
+                        DeleteStudent();
+                    }
+                    else if (option == 4)
+                    {
+                        checkAdult();
+                    }
+                    else if (option == 5)
+                    {
+                        FilterBasedOnMarks();
+                    }
+                    else if (option == 6)
+                    {
+                        running = false;
+                        Console.WriteLine("Program Ended");
+                    }
                 }
-                else if (option == 2)
+                catch (FormatException)
                 {
-                    displayStudent();
-                }
-                else if (option == 3)
+                    Console.WriteLine("Invalid Marks. Enter Correct Marks");
+ }
+                catch (Exception ex)
                 {
-                    DeleteStudent();
+                    Console.WriteLine("Something Went Wrong: " + ex.Message);
                 }
-                else if (option == 4)
-                {
-                    checkAdult();
-                }
-                else if(option == 5)
-                {
-                    FilterBasedOnMarks();
-                }
-                else if (option == 6)
-                {
-                    running = false;
-                    Console.WriteLine("Program Ended");
-                }
+
+                
             }
         }
 
         void AddStudent()
         {
-            Console.Write("Enter Name:");
-            string name = Console.ReadLine();
+            try
+            {
+                Console.Write("Enter Name:");
+                string name = Console.ReadLine();
 
-            Console.Write("Enter Age:");
-            int age = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Enter Age:");
+                int age = Convert.ToInt32(Console.ReadLine());
 
-            Console.Write("Enter Marks");
-            int marks = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Enter Marks:");
+                int marks = Convert.ToInt32(Console.ReadLine());
 
-            Student student = new Student(name, age, marks);
+                Student student = new Student(name, age, marks);
 
-            students.Add(student);
+                students.Add(student);
 
-            Console.WriteLine("Student Added Successfully");
+                Console.WriteLine("Student Added Successfully");
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid Age or Marks. Enter Correct Age or Marks");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Something went wrong: " + ex.Message);
+            }            
         }
 
         void displayStudent()
@@ -189,27 +213,49 @@ namespace StudentManagement.Services
 
         void AboveMarksFilter()
         {
-            Console.Write("Enter Minimum Marks for student");
-            int min = Convert.ToInt32(Console.ReadLine());
-
-            var filteredStudents = students.Where(s => s.Marks > min);
-
-            foreach(Student s in filteredStudents)
+            try
             {
-                s.displayInfo();
+                Console.Write("Enter Minimum Marks for student");
+                int min = Convert.ToInt32(Console.ReadLine());
+
+                var filteredStudents = students.Where(s => s.Marks > min);
+
+                foreach (Student s in filteredStudents)
+                {
+                    s.displayInfo();
+                }
+            }
+            catch(FormatException)
+            {
+                Console.WriteLine("Invalid Marks. Enter Correct Marks");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Something Went Wrong: " + ex.Message);
             }
         }
 
         void BelowMarksFilter()
         {
-            Console.Write("Enter Minimum Marks for student");
-            int max = Convert.ToInt32(Console.ReadLine());
-
-            var filteredStudents = students.Where(s => s.Marks < max);
-
-            foreach (Student s in filteredStudents)
+            try
             {
-                s.displayInfo();
+                Console.Write("Enter Minimum Marks for student");
+                int max = Convert.ToInt32(Console.ReadLine());
+
+                var filteredStudents = students.Where(s => s.Marks < max);
+
+                foreach (Student s in filteredStudents)
+                {
+                    s.displayInfo();
+                }
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid Marks. Enter Correct Marks");
+ }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Something Went Wrong: " + ex.Message);
             }
         }
 
