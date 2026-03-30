@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting;
-using System.Text;
-using System.Threading.Tasks;
 using StudentManagement.Model;
 
 namespace StudentManagement.Services
 {
     internal class StudentServices
     {
-        List<Student> students = new List<Student>();
+        List<Person> Person = new List<Person>();
 
         public void Run()
         {
@@ -26,7 +23,10 @@ namespace StudentManagement.Services
                     Console.WriteLine("3. Delete Student");
                     Console.WriteLine("4. Check Adult");
                     Console.WriteLine("5. Filter Bases On Marks");
-                    Console.WriteLine("6. Exit");
+                    Console.WriteLine("6. Add Professor");
+                    Console.WriteLine("7. View Professor");
+                    Console.WriteLine("8. Delete Professor");
+                    Console.WriteLine("9. Exit");
                     Console.Write("Choose option: ");
 
                     int option = Convert.ToInt32(Console.ReadLine());
@@ -52,6 +52,18 @@ namespace StudentManagement.Services
                         FilterBasedOnMarks();
                     }
                     else if (option == 6)
+                    {
+                        AddProfessor();
+                    }
+                    else if (option == 7)
+                    {
+                        DisplayProfessor();
+                    }
+                    else if (option == 8)
+                    {
+                        DeleteProfessor();
+                    }
+                    else if (option == 9)
                     {
                         running = false;
                         Console.WriteLine("Program Ended");
@@ -85,7 +97,7 @@ namespace StudentManagement.Services
 
                 Student student = new Student(name, age, marks);
 
-                students.Add(student);
+                Person.Add(student);
 
                 Console.WriteLine("Student Added Successfully");
             }
@@ -101,7 +113,7 @@ namespace StudentManagement.Services
 
         void displayStudent()
         {
-            if(students.Count == 0)
+            if(Person.Count == 0)
             {
                 Console.WriteLine("No Record Found");
                 return;
@@ -110,9 +122,9 @@ namespace StudentManagement.Services
             {
                 Console.WriteLine("\n---List of Student---");
 
-                foreach (Student s in students)
+                foreach (Student p in Person.OfType<Student>())
                 {
-                    s.displayInfo();
+                    p.displayInfo();
                     Console.WriteLine("----------");
                 }
             }
@@ -124,17 +136,18 @@ namespace StudentManagement.Services
             Console.Write("Enter Student name: ");
             string name = Console.ReadLine();
 
-            if (students.Count == 0)
+            if (Person.Count == 0)
             {
                 Console.WriteLine("No records to delete");
                 return;
             }
 
-            Student studentToRemove = students.Find(s => s.Name.Equals(name));
+            Person studentToRemove = Person.OfType<Student>()
+                                           .FirstOrDefault(s => s.Name.Equals(name));
 
             if (studentToRemove != null)
             {
-                students.Remove(studentToRemove);
+                Person.Remove(studentToRemove);
                 Console.WriteLine("Student removed successfully");
             }
             else
@@ -148,7 +161,8 @@ namespace StudentManagement.Services
             Console.Write("Enter Name whose age you have to check:");
             string name = Console.ReadLine();
 
-            Student nameToCheck = students.Find(s => s.Name.Equals(name));
+            Person nameToCheck = Person.OfType<Student>()
+                                       .FirstOrDefault(s => s.Name.Equals(name));
 
             if (nameToCheck != null)
             {
@@ -206,7 +220,8 @@ namespace StudentManagement.Services
 
         void StudentWithMaxMarks()
         {
-            var topStudent = students.OrderByDescending(s=>s.Marks).FirstOrDefault();
+            var topStudent = Person.OfType<Student>()
+                                   .OrderByDescending(s=>s.Marks).FirstOrDefault();
 
             topStudent.displayInfo();
         }
@@ -218,7 +233,8 @@ namespace StudentManagement.Services
                 Console.Write("Enter Minimum Marks for student");
                 int min = Convert.ToInt32(Console.ReadLine());
 
-                var filteredStudents = students.Where(s => s.Marks > min);
+                var filteredStudents = Person.OfType<Student>()
+                                             .Where(s => s.Marks > min);
 
                 foreach (Student s in filteredStudents)
                 {
@@ -242,7 +258,7 @@ namespace StudentManagement.Services
                 Console.Write("Enter Minimum Marks for student");
                 int max = Convert.ToInt32(Console.ReadLine());
 
-                var filteredStudents = students.Where(s => s.Marks < max);
+                var filteredStudents = Person.OfType<Student>().Where(s => s.Marks < max);
 
                 foreach (Student s in filteredStudents)
                 {
@@ -261,9 +277,81 @@ namespace StudentManagement.Services
 
         void MinimumMarks()
         {
-            var bottomStudent = students.OrderBy(s => s.Marks).FirstOrDefault();
+            var bottomStudent = Person.OfType<Student>().OrderBy(s => s.Marks).FirstOrDefault();
 
             bottomStudent.displayInfo();
+        }
+
+        void AddProfessor()
+        {
+            try
+            {
+                Console.Write("Enter Name:");
+                string name = Console.ReadLine();
+
+                Console.Write("Enter Age:");
+                int age = Convert.ToInt32(Console.ReadLine());
+
+                Console.Write("Enter Employee ID:");
+                int EmpId = Convert.ToInt32(Console.ReadLine());
+
+                Professor professor = new Professor(name, age, EmpId);
+
+                Person.Add(professor);
+
+                Console.WriteLine("Student Added Successfully");
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Invalid Age or Marks. Enter Correct Age or Marks");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Something went wrong: " + ex.Message);
+            }
+
+        }
+       
+        void DisplayProfessor()
+        {
+            if(Person.Count == 0)
+            {
+                Console.WriteLine("No Records Found");
+            }
+            else
+            {
+                Console.WriteLine("-----List Of Professor------");
+
+                foreach(Professor p in Person.OfType<Professor>())
+                {
+                    p.displayInfo();
+                }
+            }
+        }
+
+        void DeleteProfessor()
+        {
+            Console.Write("Enter Professor name: ");
+            string name = Console.ReadLine();
+
+            if (Person.Count == 0)
+            {
+                Console.WriteLine("No records to delete");
+                return;
+            }
+
+            Person ProfessorToRemove = Person.OfType<Professor>()
+                                           .FirstOrDefault(s => s.Name.Equals(name));
+
+            if (ProfessorToRemove != null)
+            {
+                Person.Remove(ProfessorToRemove);
+                Console.WriteLine("Professor removed successfully");
+            }
+            else
+            {
+                Console.WriteLine("Professor not found");
+            }
         }
     }
 }
