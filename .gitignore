@@ -10,3 +10,4 @@ obj/
 *.suo
 *.vsidx
 **/appsettings.Development.json
+**/appsettings.json
