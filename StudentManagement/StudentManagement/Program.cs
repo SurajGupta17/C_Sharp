@@ -11,8 +11,11 @@ namespace StudentManagement
     {
         static void Main(string[] args)
         {
-            StudentServices ser = new StudentServices();
+            IStudentService ser = new StudentServices();
             ser.Run();
+
+            IProfessorService pser = new StudentServices();
+            pser.Run();
         }
 
 

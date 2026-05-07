@@ -9,3 +9,4 @@ obj/
 *.user
 *.suo
 *.vsidx
+**/appsettings.Development.json

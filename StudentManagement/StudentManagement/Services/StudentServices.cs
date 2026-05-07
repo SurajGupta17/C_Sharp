@@ -5,7 +5,7 @@ using StudentManagement.Model;
 
 namespace StudentManagement.Services
 {
-    internal class StudentServices
+    internal class StudentServices : IStudentService,IProfessorService
     {
         List<Person> Person = new List<Person>();
 
@@ -82,7 +82,7 @@ namespace StudentManagement.Services
             }
         }
 
-        void AddStudent()
+        public void AddStudent()
         {
             try
             {
@@ -111,7 +111,7 @@ namespace StudentManagement.Services
             }            
         }
 
-        void displayStudent()
+        public void displayStudent()
         {
             if(Person.Count == 0)
             {
@@ -131,7 +131,7 @@ namespace StudentManagement.Services
 
         }
 
-        void DeleteStudent()
+        public void DeleteStudent()
         {
             Console.Write("Enter Student name: ");
             string name = Console.ReadLine();
@@ -156,7 +156,7 @@ namespace StudentManagement.Services
             }
         }
 
-        void checkAdult()
+        public void checkAdult()
         {
             Console.Write("Enter Name whose age you have to check:");
             string name = Console.ReadLine();
@@ -178,7 +178,7 @@ namespace StudentManagement.Services
             }
         }
 
-        void FilterBasedOnMarks()
+        public void FilterBasedOnMarks()
         {
            bool running = true;
 
@@ -218,7 +218,7 @@ namespace StudentManagement.Services
             }
         }
 
-        void StudentWithMaxMarks()
+        public void StudentWithMaxMarks()
         {
             var topStudent = Person.OfType<Student>()
                                    .OrderByDescending(s=>s.Marks).FirstOrDefault();
@@ -226,7 +226,7 @@ namespace StudentManagement.Services
             topStudent.displayInfo();
         }
 
-        void AboveMarksFilter()
+        public void AboveMarksFilter()
         {
             try
             {
@@ -251,7 +251,7 @@ namespace StudentManagement.Services
             }
         }
 
-        void BelowMarksFilter()
+        public void BelowMarksFilter()
         {
             try
             {
@@ -275,14 +275,14 @@ namespace StudentManagement.Services
             }
         }
 
-        void MinimumMarks()
+        public void MinimumMarks()
         {
             var bottomStudent = Person.OfType<Student>().OrderBy(s => s.Marks).FirstOrDefault();
 
             bottomStudent.displayInfo();
         }
 
-        void AddProfessor()
+        public void AddProfessor()
         {
             try
             {
@@ -312,7 +312,7 @@ namespace StudentManagement.Services
 
         }
        
-        void DisplayProfessor()
+        public void DisplayProfessor()
         {
             if(Person.Count == 0)
             {
@@ -329,7 +329,7 @@ namespace StudentManagement.Services
             }
         }
 
-        void DeleteProfessor()
+        public void DeleteProfessor()
         {
             Console.Write("Enter Professor name: ");
             string name = Console.ReadLine();
