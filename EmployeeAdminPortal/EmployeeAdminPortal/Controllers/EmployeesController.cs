@@ -3,6 +3,7 @@ using EmployeeAdminPortal.Models.Entities;
 using EmployeeAdminPortal.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using EmployeeAdminPortal.Services;
 
 namespace EmployeeAdminPortal.Controllers
 {
@@ -11,17 +12,17 @@ namespace EmployeeAdminPortal.Controllers
     [Authorize]
     public class EmployeesController : ControllerBase
     {
-        private readonly IEmployeeRepository employeeRepository;
+        private readonly IEmployeeService employeeService;
 
-        public EmployeesController(IEmployeeRepository employeeRepository)
+        public EmployeesController(IEmployeeService employeeService)
         {
-            this.employeeRepository = employeeRepository;
+            this.employeeService = employeeService;
         }
 
         [HttpGet]
         public IActionResult GetAllEmployees()
         {
-            var employees = employeeRepository.GetAll();
+            var employees = employeeService.GetAll();
             return Ok(employees);
         }
 
@@ -29,7 +30,7 @@ namespace EmployeeAdminPortal.Controllers
         [Route("{id:guid}")]
         public IActionResult GetEmployeeById(Guid id)
         {
-            var employee = employeeRepository.GetById(id);
+            var employee = employeeService.GetById(id);
             if (employee == null)
                 return NotFound();
             return Ok(employee);
@@ -38,31 +39,17 @@ namespace EmployeeAdminPortal.Controllers
         [HttpPost]
         public IActionResult AddEmployee(AddEmployeeDTO addEmployeeDTO)
         {
-            var employee = new Employee()
-            {
-                name = addEmployeeDTO.name,
-                email = addEmployeeDTO.email,
-                phone = addEmployeeDTO.phone,
-                salary = addEmployeeDTO.salary
-            };
 
-            var addedEmployee = employeeRepository.Add(employee);
+            var addedEmployee = employeeService.Add(addEmployeeDTO);
             return Ok(addedEmployee);
         }
 
         [HttpPut]
         [Route("{id:guid}")]
         public IActionResult UpdateEmployee(Guid id, UpdateEmployeeDTO updateEmployeeDTO)
-        {
-            var employee = new Employee()
-            {
-                name = updateEmployeeDTO.name,
-                email = updateEmployeeDTO.email,
-                phone = updateEmployeeDTO.phone,
-                salary = updateEmployeeDTO.salary
-            };
+        { 
 
-            var updatedEmployee = employeeRepository.Update(id, employee);
+            var updatedEmployee = employeeService.Update(id, updateEmployeeDTO);
             if (updatedEmployee == null)
                 return NotFound();
             return Ok(updatedEmployee);
@@ -72,7 +59,7 @@ namespace EmployeeAdminPortal.Controllers
         [Route("{id:guid}")]
         public IActionResult DeleteEmployee(Guid id)
         {
-            var result = employeeRepository.Delete(id);
+            var result = employeeService.Delete(id);
             if (!result)
                 return NotFound();
             return Ok("Employee deleted successfully");
