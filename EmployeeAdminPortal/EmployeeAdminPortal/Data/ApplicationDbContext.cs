@@ -12,5 +12,8 @@ namespace EmployeeAdminPortal.Data
         public DbSet<Employee> employees { get; set; }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<TaskItem> Tasks { get; set; }
+
     }
 }

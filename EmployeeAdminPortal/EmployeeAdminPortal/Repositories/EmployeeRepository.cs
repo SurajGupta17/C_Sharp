@@ -1,5 +1,6 @@
 ﻿using EmployeeAdminPortal.Data;
 using EmployeeAdminPortal.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeAdminPortal.Repositories
 {
@@ -14,12 +15,16 @@ namespace EmployeeAdminPortal.Repositories
 
         public List<Employee> GetAll()
         {
-            return dbContext.employees.ToList();
+            return dbContext.employees
+                .Include(e =>e.Tasks)
+                .ToList();
         }
 
         public Employee? GetById(Guid id)
         {
-            return dbContext.employees.Find(id);
+            return dbContext.employees
+                            .Include(e =>e.Tasks)
+                            .FirstOrDefault(e =>e.Id == id);
         }
 
         public Employee Add(Employee employee)

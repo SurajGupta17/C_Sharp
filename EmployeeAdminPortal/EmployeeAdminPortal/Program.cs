@@ -26,7 +26,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 // Add services to the containera
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+       .AddJsonOptions(options =>
+       {
+           options.JsonSerializerOptions.ReferenceHandler =
+               System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+       });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -62,6 +67,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options
 
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<ITaskRepositories,TaskRepositories>();
+builder.Services.AddScoped<ITaskServices, TaskServices>();
 
 var app = builder.Build();
 
