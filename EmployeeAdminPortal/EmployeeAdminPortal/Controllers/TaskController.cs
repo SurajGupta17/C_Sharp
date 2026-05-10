@@ -10,7 +10,6 @@ namespace EmployeeAdminPortal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class TaskController : ControllerBase
     {
         private readonly ITaskServices taskServices;
@@ -20,13 +19,15 @@ namespace EmployeeAdminPortal.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllEmployee()
+        [Authorize(Roles = "Admin,Manager")]
+        public IActionResult GetAllTask()
         {
             return Ok(taskServices.GetAll());
         }
 
         [HttpGet]
         [Route("{id:guid}")]
+        [Authorize(Roles = "Admin,Manager,Employee")]
         public IActionResult GetById(Guid id)
         {
             var task = taskServices.GetById(id);
@@ -38,6 +39,7 @@ namespace EmployeeAdminPortal.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Manager,Employee")]
         public IActionResult Add(AddTaskDTO addtaskDTO)
         {
             var addedtask = taskServices.Add(addtaskDTO);
@@ -46,13 +48,11 @@ namespace EmployeeAdminPortal.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
+        [Authorize (Roles = "Manager,Admin")]
         public IActionResult Delete(Guid id)
         {
             var deletedTask = taskServices.Delete(id);
-            if(deletedTask == null)
-            {
-                return NotFound();
-            }
+        
             return Ok("Task Removed Successfully");
         }
     }

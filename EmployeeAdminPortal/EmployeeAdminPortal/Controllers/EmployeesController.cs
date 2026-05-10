@@ -9,7 +9,6 @@ namespace EmployeeAdminPortal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeService employeeService;
@@ -20,6 +19,7 @@ namespace EmployeeAdminPortal.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult GetAllEmployees()
         {
             var employees = employeeService.GetAll();
@@ -28,6 +28,7 @@ namespace EmployeeAdminPortal.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
+        [Authorize(Roles ="Admin,Manager")]
         public IActionResult GetEmployeeById(Guid id)
         {
             var employee = employeeService.GetById(id);
@@ -37,6 +38,7 @@ namespace EmployeeAdminPortal.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult AddEmployee(AddEmployeeDTO addEmployeeDTO)
         {
 
@@ -46,6 +48,7 @@ namespace EmployeeAdminPortal.Controllers
 
         [HttpPut]
         [Route("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult UpdateEmployee(Guid id, UpdateEmployeeDTO updateEmployeeDTO)
         { 
 
@@ -57,6 +60,7 @@ namespace EmployeeAdminPortal.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteEmployee(Guid id)
         {
             var result = employeeService.Delete(id);

@@ -34,7 +34,8 @@ namespace EmployeeAdminPortal.Controllers
             var user = new User()
             {
                 Email = registerDTO.Email,
-                Password = registerDTO.Password
+                Password = registerDTO.Password,
+                Role = registerDTO.Role
             };
 
             dbContext.Users.Add(user);
@@ -67,7 +68,8 @@ namespace EmployeeAdminPortal.Controllers
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role,user.Role)
             };
 
             var token = new JwtSecurityToken(
