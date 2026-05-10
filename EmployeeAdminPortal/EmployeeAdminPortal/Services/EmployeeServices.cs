@@ -13,9 +13,9 @@ namespace EmployeeAdminPortal.Services
             this.employeeRepository = employeeRepository;
         }
 
-        public List<Employee> GetAll()
+        public List<Employee> GetAll(int page, int pagesize, string search)
         {
-            return employeeRepository.GetAll();
+            return employeeRepository.GetAll(page,pagesize,search);
         }
 
         public Employee? GetById(Guid id)

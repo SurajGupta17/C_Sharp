@@ -20,9 +20,9 @@ namespace EmployeeAdminPortal.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin,Manager")]
-        public IActionResult GetAllEmployees()
+        public IActionResult GetAllEmployees(int page =1,int pagesize =1,string? search = null)
         {
-            var employees = employeeService.GetAll();
+            var employees = employeeService.GetAll(page,pagesize,search);
             return Ok(employees);
         }
 

@@ -13,11 +13,22 @@ namespace EmployeeAdminPortal.Repositories
             this.dbContext = dbContext;
         }
 
-        public List<Employee> GetAll()
+        public List<Employee> GetAll(int page,int pagesize,string search)
         {
-            return dbContext.employees
+           var query = dbContext.employees
                 .Include(e =>e.Tasks)
-                .ToList();
+                .AsQueryable();
+
+            //Filtering
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(e => e.name == search);
+            }
+
+            //Pagination
+            return query.Skip((page - 1) * pagesize)
+                        .Take(pagesize)
+                        .ToList();
         }
 
         public Employee? GetById(Guid id)
